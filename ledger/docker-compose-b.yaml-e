@@ -1,0 +1,103 @@
+#
+# Copyright Altoros. All Rights Reserved.
+#
+
+version: '2'
+
+services:
+
+  ca.b.farmchain.ca:
+    container_name: ca.b.farmchain.ca
+    image: hyperledger/fabric-ca:x86_64-1.0.3
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.b.farmchain.ca-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA_PRIVATE_KEY
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.b.farmchain.ca-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA_PRIVATE_KEY
+#    ports:
+#      - 8054:7054
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - ../artifacts/crypto-config/peerOrganizations/b.farmchain.ca/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ../artifacts/fabric-ca-server-config-b.yaml:/etc/hyperledger/fabric-ca-server/fabric-ca-server-config.yaml
+
+  peer0.b.farmchain.ca:
+    container_name: peer0.b.farmchain.ca
+    extends:
+      file:   base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.b.farmchain.ca
+      - CORE_PEER_LOCALMSPID=bMSP
+      - CORE_PEER_ADDRESS=peer0.b.farmchain.ca:7051
+    ports:
+      - 8051:7051
+      - 8053:7053
+    volumes:
+        - ../artifacts/crypto-config/peerOrganizations/b.farmchain.ca/peers/peer0.b.farmchain.ca/:/etc/hyperledger/crypto/peer
+    depends_on:
+      - ca.b.farmchain.ca
+    
+
+  peer1.b.farmchain.ca:
+    container_name: peer1.b.farmchain.ca
+    extends:
+      file:   base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.b.farmchain.ca
+      - CORE_PEER_LOCALMSPID=bMSP
+      - CORE_PEER_ADDRESS=peer1.b.farmchain.ca:7051
+    ports:
+      - 8056:7051
+      - 8058:7053
+    volumes:
+        - ../artifacts/crypto-config/peerOrganizations/b.farmchain.ca/peers/peer1.b.farmchain.ca/:/etc/hyperledger/crypto/peer
+    depends_on:
+      - ca.b.farmchain.ca
+    
+
+  # fabric-rest api server
+  api.b.farmchain.ca:
+    extends:
+      file: base.yaml
+      service: api-base
+    container_name: api.b.farmchain.ca
+    ports:
+      - 4001:4000
+    environment:
+      - ORG=b
+      - PORT=4000
+    depends_on:
+      - peer0.b.farmchain.ca
+      - peer1.b.farmchain.ca
+    
+
+  cli.farmchain.ca:
+    container_name: cli.farmchain.ca
+    extends:
+      file: base.yaml
+      service: cli-base
+    volumes:
+      - ../artifacts/crypto-config/ordererOrganizations/farmchain.ca/orderers/orderer.farmchain.ca/tls:/etc/hyperledger/crypto/orderer/tls
+
+  cli.b.farmchain.ca:
+    container_name: cli.b.farmchain.ca
+    extends:
+      service: cli.farmchain.ca
+    environment:
+      - CORE_PEER_LOCALMSPID=bMSP
+    volumes:
+        - ../artifacts/crypto-config/peerOrganizations/b.farmchain.ca/users/Admin@b.farmchain.ca:/etc/hyperledger/crypto/peer
+    
+
+  # simple http server to disseminate certificates
+  www.b.farmchain.ca:
+    extends:
+      file: base.yaml
+      service: www-base
+    container_name: www.b.farmchain.ca
+    ports:
+      - 8082:80
