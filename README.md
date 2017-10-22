@@ -1,6 +1,6 @@
-# Starter Application for Hyperledger Fabric 1.0
+# Farm Lease Application for Hyperledger Fabric 1.0
 
-Create a network to jump start development of your decentralized application.
+This application will create a sample decentralized network of farmers to manage land leasing process. The farmers can lease their land or lease from others. A farmer can initiate a lease (leasor), and/or send amendments, until its signed by the leasse. They can query the channel anytime to see the leases on that channel.
 
 The network can be deployed to multiple docker containers on one host for development or to multiple hosts for testing 
 or production.
@@ -22,21 +22,20 @@ Most of the plumbing work is taken care of by this starter.
 
 Network consortium consists of:
 
-- Orderer organization `example.com`
-- Peer organization org1 `a` 
-- Peer organization org2 `b` 
-- Peer organization org3 `c`
+- Orderer organization `farmchain.ca`
+- Farmer/Landowner Peer org1 `a` 
+- Farmer/Landowner Peer  org2 `b` 
+- Farmer/Landowner Peer  org3 `c`
 
 They transact with each other on the following channels:
 
 - `common` involving all members and with chaincode `reference` deployed
-- bilateral confidential channels between pairs of members with chaincode `relationship` deployed to them
+- bilateral confidential channels between pairs of members with chaincode `neighbour` deployed to them
   - `a-b`
   - `a-c`
   - `b-c`
 
-Both chaincodes are copies of [chaincode_example02](https://github.com/hyperledger/fabric/tree/release/examples/chaincode/go/chaincode_example02).
-Replace these sources with your own.
+neighbor chaincode is in [neighbour_chaincode.go]
 
 Each organization starts several docker containers:
 
