@@ -10,7 +10,7 @@ starttime=$(date +%s)
 : ${ORG3:="c"}
 : ${IP1:="54.196.240.151"}
 : ${IP2:="162.253.55.201"}
-: ${IP3:="54.211.142.174"}
+: ${IP3:="ec2-18-216-95-46.us-east-2.compute.amazonaws.com"}
 
 WGET_OPTS="--verbose -N"
 CLI_TIMEOUT=10000
