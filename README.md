@@ -35,7 +35,9 @@ They transact with each other on the following channels:
   - `a-c`
   - `b-c`
 
-neighbor chaincode is in [neighbour_chaincode.go]
+neighbor chaincode is in [neighbour_chaincode.go]. This supports methods: init, addLease, amendLease, queryLease [queries by full or partial key], query, signLease.
+
+Each lease is made up of Lease Key (Season, Lot), Value (leasor, leasse, terms)
 
 Each organization starts several docker containers:
 
