@@ -3,7 +3,7 @@
 starttime=$(date +%s)
 
 # defaults; export these variables before executing this script
-: ${DOMAIN:="example.com"}
+: ${DOMAIN:="farmchain.ca"}
 : ${IP_ORDERER:="54.234.201.67"}
 : ${ORG1:="a"}
 : ${ORG2:="b"}
@@ -18,9 +18,9 @@ COMPOSE_TEMPLATE=ledger/docker-composetemplate.yaml
 COMPOSE_FILE_DEV=ledger/docker-composedev.yaml
 
 CHAINCODE_COMMON_NAME=reference
-CHAINCODE_BILATERAL_NAME=relationship
-CHAINCODE_COMMON_INIT='{"Args":["init","a","100","b","100"]}'
-CHAINCODE_BILATERAL_INIT='{"Args":["init","a","100","b","100"]}'
+CHAINCODE_BILATERAL_NAME=neighbour
+CHAINCODE_COMMON_INIT='{"Args":[]}'
+CHAINCODE_BILATERAL_INIT='{"Args":[]}'
 CHAINCODE_WARMUP_QUERY='{\"Args\":[\"query\"]}'
 
 DEFAULT_ORDERER_PORT=7050
