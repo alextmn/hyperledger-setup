@@ -1,5 +1,12 @@
 # Farm Lease Application for Hyperledger Fabric 1.0
 
+TODO: 
+1. implement an endorsement policy when instantiating to make sure all the peers endorse the transaction
+2. implement a leasorsignature to make sure all the proposed amendments are reviewed by both leasor and leasse
+3. a registry of land owners with lot information and an identity public key
+4. encrypt lease data on common channel ledger
+5. check on the common channel with an orchestrator to check if the land is not already leased for the requsted season (in addLease and signLease)
+
 This application will create a sample decentralized network of farmers to manage land leasing process. The farmers can lease their land or lease from others. A farmer can initiate a lease (leasor), and/or send amendments, until its signed by the leasse. They can query the channel anytime to see the leases on that channel.
 
 The network can be deployed to multiple docker containers on one host for development or to multiple hosts for testing 
