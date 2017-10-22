@@ -19,4 +19,6 @@ build
 /fabric-starter.ipr
 /fabric-starter.iml
 /ledger/docker-compose-*.yaml
+/ledger/docker-compose-*-e.yaml
 /fabric-starter.iws
+/www/artifacts/*.block
